@@ -1,23 +1,26 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import List from './component/List';
+import Details from './component/Details';
+import axios from 'axios';
 
 function App() {
+  const [user, setUser] = useState([])
+  const [item, setItem] = useState();
+  const userUrl = 'https://raw.githubusercontent.com/netology-code/ra16-homeworks/master/hooks-context/use-effect/data/users.json';
+  useEffect(() => {
+    axios.get(userUrl)
+      .then(function (response) {
+        setUser(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <List user={user} setItem={setItem} />
+      {item && <Details item={item} />}
     </div>
   );
 }
